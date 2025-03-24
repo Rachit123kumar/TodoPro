@@ -203,6 +203,17 @@ if(error){
 return docs
 
 }
+export async function getDocsByOwnerId(id){
+  
+  let { data: docs, error } = await supabase
+  .from('docs')
+  .select('*')
+  .eq("owner_id",id)
+  if(error){
+    return error
+  }
+  return docs
+}
 
 export async function checkDocsOwner(docsId,ownerId){
   console.log(docsId,ownerId,"from checkdocsOwner")
@@ -225,3 +236,93 @@ export async function checkDocsOwner(docsId,ownerId){
 }
 
 
+export async function fetchFriends(userId){
+
+  const  { data: friends, error } = await supabase
+  .from('friends')
+  .select("*")
+
+  // Filters
+  .eq('user_id', userId)
+console.log(friends)
+return friends
+          
+}
+
+export   async function sendMessage(msg,userId,friend_id){
+  
+const { data, error } = await supabase
+.from('messsages')
+.insert([
+  { receiver_id: friend_id, sender_id: userId ,message:msg},
+])
+.select()
+
+if(!error){
+  toast("sucess data sended")
+}
+return 
+        
+
+}
+
+export async function getMessages(userId,friendId){
+    
+  // let { data: messsages1, error1 } = await supabase
+  // .from('messsages')
+  // .select("*")
+
+  // // Filters
+  // .eq("sender_id", userId)
+  // .eq("receiver_id",friendId)
+    
+  // let { data: messsages2, error2 } = await supabase
+  // .from('messsages')
+  // .select("*")
+
+  // // Filters
+  // .eq("sender_id", friendId)
+  // .eq("receiver_id",userId)
+
+  // if(!error1 && !error2){
+  //   return {messsages1 , messsages2}
+  // }
+
+
+
+
+
+
+    const { data, error } = await supabase
+      .from("messsages") // your table name
+      .select("*")
+      .or(`and(sender_id.eq.${userId},receiver_id.eq.${friendId}),and(sender_id.eq.${friendId},receiver_id.eq.${userId})`)
+      .order("created_at", { ascending: true });
+  
+    if (error) {
+      console.error("Error fetching messages:", error);
+      return [];
+    }
+  
+    return data;
+  }
+  
+ export const changes = supabase
+  .channel('schema-db-changes')
+  .on(
+    'postgres_changes',
+    {
+      schema: 'public', // Subscribes to the "public" schema in Postgres
+      event: '*',       // Listen to all changes
+    },
+    (payload) => console.log(payload)
+  )
+  .subscribe()
+  
+
+  export async function signOut() {
+    const { error } = await supabase.auth.signOut()
+    if(!error){
+      throw new Error("Error while sign out")
+    }
+  }

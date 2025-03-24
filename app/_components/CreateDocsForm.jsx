@@ -1,8 +1,8 @@
 "use client"
 import { Box, Button, Input, Modal, Typography, useTheme } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useGetUser } from "./useBooking";
-import { insertDocs } from "../_utils/actions";
+import { getDocs, getDocsByOwnerId, insertDocs } from "../_utils/actions";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 
@@ -27,13 +27,32 @@ export default function CreateDocsForm(){
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
     const [docsTitle,setDocsTitle]=useState("")
+    const [myDocs,setMyDocs]=useState([])
 const router=useRouter()
 
     const {data,isLoading,error}=useGetUser();
 
+useEffect(()=>{
+  if(!data){
+    return
+  }
+  async function getMyDocs(){
+     const res=await getDocsByOwnerId(data.id)
+     setMyDocs(res)
+     console.log(res)
+
+
+  }
+  getMyDocs()
+},[data])
+
+
+
 
 async function handleCreateDocs(){
-    if(!data.id || !docsTitle){
+    if(!data?.id || !docsTitle){
+      toast("please login to create a docs")
+      
         console.log("wewe")
         return
     
@@ -55,9 +74,10 @@ try{
     // console.log(data,isLoading,error)
 }
 
-    return    <div className='mx-w-[800px] flex items-center justify-around mt-10 mb-10'>
+    return    <div className='mx-w-[800px] p-10 bg-blue-500 flex items-center gap-10 mt-10 mb-10'>
     
-    <div className='bg-gray-400 rounded relative h-[200px] w-[200px]  bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500'>
+    <div className=' rounded cursor-pointer relative h-[200px] w-[200px]   bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500'>
+      <p className="text-white mt-3 font-bold text-xl text-center bg-gradient-to-r from-orange-500 via-indigo-500 to-green-500  bg-clip-text">Create Docs</p>
     
     <span className='absolute  bottom-5 right-5 ' onClick={()=>setOpen(true)}>
     
@@ -92,5 +112,20 @@ try{
       </Modal>
 
     
+
+{
+  myDocs.length >0 &&
+  myDocs.map((el,i)=>{
+    return <div key={i} onClick={()=>router.push(`/docs/edit/${el.id}`)} className="rounded cursor-pointer relative h-[200px] w-[200px]  bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500">
+      <p className="text-center pt-3 text-white font-bold">{el.title || "no title"}</p>
+      <p></p>
+
+    </div>
+  })
+}
+
+
+
+
         </div>
 }

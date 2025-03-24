@@ -4,6 +4,9 @@ import { ToastContainer } from "react-toastify";
 
 
 import QueryProvider from "./_components/QueryProvider";
+import { Provider } from "react-redux";
+import store from "./_feature/user/store";
+import ReduxProvider from "./_components/ReduxProvider";
 // import { MantineProvider } from "@mantine/core";
 
 const geistSans = Geist({
@@ -28,13 +31,18 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-     <QueryProvider>
+{/* <Provider store={store}> */}
+<ReduxProvider>
 
+     <QueryProvider>
+  
        {children}
+         <ToastContainer/>
      </QueryProvider>
+</ReduxProvider>
+{/* </Provider> */}
 
       
-         <ToastContainer/>
       </body>
     </html>
   );

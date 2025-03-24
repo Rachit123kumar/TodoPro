@@ -11,13 +11,30 @@ import Tooltip from '@mui/material/Tooltip';
 import PersonAdd from '@mui/icons-material/PersonAdd';
 import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
+import { useRouter } from 'next/navigation';
+import { signOut } from '../_utils/actions';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
-export default function AccountMenu({title=""}) {
+export default function AccountMenu({title="",user}) {
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const router=useRouter()
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
+  console.log(user,"user", title,"title")
+
+const queryClient= useQueryClient()
+
+  async function handleLogout(){
+    await signOut()
+    queryClient.invalidateQueries({
+      queryKey:["userInfo"]
+    })
+  
+  }
+
+
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -26,7 +43,7 @@ export default function AccountMenu({title=""}) {
       <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
         {/* <Typography sx={{ minWidth: 100 }}>Contact</Typography>
         <Typography sx={{ minWidth: 100 }}>Profile</Typography> */}
-        <Tooltip title="Account settings">
+        {user ?<Tooltip title="Account settings">
           <IconButton
             onClick={handleClick}
             size="small"
@@ -35,9 +52,11 @@ export default function AccountMenu({title=""}) {
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
           >
-            <Avatar sx={{ width: 32, height: 32 }}>{title.at(0) || "Login"}</Avatar>
+            <Avatar sx={{ width: 32, height: 32 }}>{title.at(0) }</Avatar>
           </IconButton>
-        </Tooltip>
+        </Tooltip> :
+        <p className='mr-3' onClick={()=>router.push("/login")}>Login</p>
+        }
       </Box>
       <Menu
         anchorEl={anchorEl}
@@ -76,31 +95,69 @@ export default function AccountMenu({title=""}) {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        <MenuItem onClick={handleClose}>
-          <Avatar /> Profile
+        {user?
+
+          <MenuItem onClick={handleClose}>
+          <Avatar onClick={()=>router.push('/profile')}/> Profile
+        </MenuItem>:
+          <MenuItem onClick={handleClose}>
+          <Avatar onClick={()=>router.push('/login')}/> Login
         </MenuItem>
+
+        }
+
+
         <MenuItem onClick={handleClose}>
           <Avatar /> My account
         </MenuItem>
         <Divider />
         <MenuItem onClick={handleClose}>
+{ user &&  <div onClick={()=>router.push("/chat")}>
+
           <ListItemIcon>
             <PersonAdd fontSize="small" />
           </ListItemIcon>
-          Add another account
+          Chat Page
+
+</div>}
+
         </MenuItem>
-        <MenuItem onClick={handleClose}>
-          <ListItemIcon>
+
+
+
+       <MenuItem onClick={handleClose}>
+     {
+user &&
+       <div onClick={()=>router.push("/setting")}>
+          <ListItemIcon >
             <Settings fontSize="small" />
           </ListItemIcon>
           Settings
+       </div>
+}
         </MenuItem>
+       { user ?
+       <div onClick={()=>handleLogout()}>
+
         <MenuItem onClick={handleClose}>
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>
           Logout
         </MenuItem>
+       </div>:
+        <MenuItem onClick={handleClose}>
+          {/* handle Logout functionality and login */}
+          <div onClick={()=>{}}>
+
+          <ListItemIcon>
+            <Logout fontSize="small" />
+          </ListItemIcon>
+          Login
+          </div>
+        </MenuItem>
+        
+        }
       </Menu>
     </React.Fragment>
   );

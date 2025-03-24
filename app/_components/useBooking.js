@@ -1,5 +1,5 @@
 import { QueryCache, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getCurrentUser, getTodo, insertTodo } from "../_utils/actions";
+import { fetchFriends, getCurrentUser, getTodo, insertTodo } from "../_utils/actions";
 
 
 
@@ -52,4 +52,17 @@ export function useGetTodo(id) {
       },
       enabled: !!id, // Ensures the query runs only when `id` is available
     });
+  }
+
+  export async function useFetchFriends(userId){
+   return useQuery({
+      queryKey:["friends",userId],
+      queryFn:async () => {
+        if(!userId)return null
+     return    await fetchFriends(userId)
+      
+      }
+  
+
+    })
   }
