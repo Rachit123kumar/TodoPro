@@ -6,6 +6,8 @@ import { fetchFriends } from "../_utils/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { updateName } from "../_feature/user/UserSlice";
 import ChatPage from "../_components/ChatPage";
+import { useRouter } from "next/navigation";
+import { Island_Moments } from "next/font/google";
 
 export default function Chat() {
 
@@ -16,10 +18,15 @@ const [notificiation,setNotification]=useState("")
 const username=useSelector(state=>state.user.username)
 
 const [chatPerson,setChatPerson]=useState("")
+const router=useRouter()
 //    const dispatch=useDispatch()
     const [friendsData, setFriendsData] = useState([])
 
     const { isLoading, error, data } = useGetUser()
+
+
+
+
 
     console.log(data);
 
@@ -38,6 +45,13 @@ const [chatPerson,setChatPerson]=useState("")
 
 
     }, [data])
+
+
+
+    if(!isLoading && !data){
+        toast.error("Please login to send Messages")
+        router.push("/login")
+    }
 
 
 if(!friendsData){
