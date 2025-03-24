@@ -83,7 +83,7 @@ export async function logout() {
 }
 
 export async function insertTodo({name, description, status, due_date, priority, category, userId}) {
-console.log(name, description, status, due_date, priority, category, userId, "from insert Todo")
+// console.log(name, description, status, due_date, priority, category, userId, "from insert Todo")
   const { data, error } = await supabase
     .from('todo')
     .insert([
@@ -216,7 +216,7 @@ export async function getDocsByOwnerId(id){
 }
 
 export async function checkDocsOwner(docsId,ownerId){
-  console.log(docsId,ownerId,"from checkdocsOwner")
+  // console.log(docsId,ownerId,"from checkdocsOwner")
   const { data, error } = await supabase
   .from('docs')
   
@@ -244,7 +244,7 @@ export async function fetchFriends(userId){
 
   // Filters
   .eq('user_id', userId)
-console.log(friends)
+// console.log(friends)
 return friends
           
 }

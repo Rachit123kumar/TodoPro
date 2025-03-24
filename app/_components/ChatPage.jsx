@@ -6,7 +6,7 @@ import { supabase, supabase2 } from '../_utils/meon'
 import { toast } from 'react-toastify'
 
 export default function ChatPage({userId,name,friendId,setNotification}) {
-  console.log(friendId,userId)
+  // console.log(friendId,userId)
   const bottomRef = useRef(null);
     const [msgInput,setMsgInput]=useState("")
    const [databaseMsg,setDatabaseMsg]=useState("")
@@ -32,7 +32,7 @@ export default function ChatPage({userId,name,friendId,setNotification}) {
       }
    
      const res=await sendMessage(msgInput,userId,friendId)
-     console.log(res);
+    //  console.log(res);
  
 
     }
@@ -42,7 +42,7 @@ export default function ChatPage({userId,name,friendId,setNotification}) {
       // setDatabaseMsgLoading(true)
         async function getMessage(){
            const res=await getMessages(userId,friendId)
-           console.log(res)
+          //  console.log(res)
          setDatabaseMsg(res)
         
         }
@@ -56,7 +56,7 @@ export default function ChatPage({userId,name,friendId,setNotification}) {
 
     },[friendId])
     useEffect(() => {
-      console.log("I am running");
+      // console.log("I am running");
 
       try{
 
@@ -71,8 +71,8 @@ export default function ChatPage({userId,name,friendId,setNotification}) {
           },
           (payload) => {
             const newMsg = payload.new;
-            console.log(newMsg)
-            console.log(payload);
+            // console.log(newMsg)
+            // console.log(payload);
     
             // Only add if it belongs to this chat
             const isRelevant =
@@ -80,18 +80,18 @@ export default function ChatPage({userId,name,friendId,setNotification}) {
               (newMsg.sender_id === friendId && newMsg.receiver_id === userId);
             
               const ReceivedReleivent=newMsg.receiver_id===userId && newMsg.senderId !==friendId
-              console.log(ReceivedReleivent)
+              // console.log(ReceivedReleivent)
               if(ReceivedReleivent){
 
              setNotification(newMsg)
-             console.log("Yes ... ")
+            //  console.log("Yes ... ")
               }
 
 
             if (isRelevant) {
               setDatabaseMsg(prev=>[...prev,newMsg])
               
-              console.log(newMsg)
+              // console.log(newMsg)
             }
           }
         )

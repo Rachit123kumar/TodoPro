@@ -39,7 +39,7 @@ useEffect(()=>{
   async function getMyDocs(){
      const res=await getDocsByOwnerId(data.id)
      setMyDocs(res)
-     console.log(res)
+    //  console.log(res)
 
 
   }
@@ -53,7 +53,7 @@ async function handleCreateDocs(){
     if(!data?.id || !docsTitle){
       toast("please login to create a docs")
       
-        console.log("wewe")
+        // console.log("wewe")
         return
     
     }

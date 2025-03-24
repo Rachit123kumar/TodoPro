@@ -21,15 +21,15 @@ export default function Login() {
 
 
 
-console.log(email,password)
+// console.log(email,password)
 
 const  res=await signup(email,password)
-console.log(res)
+// console.log(res)
 if(!res){
  alert("You have already an account please login")
     return
 }
-console.log("data:",data,"error:",error)
+// console.log("data:",data,"error:",error)
 
 
 if(data?.user?.user_metadata?.email_verified==false){
@@ -39,14 +39,14 @@ if(data?.user?.user_metadata?.email_verified==false){
 
 
 if(error && error.message){
-    console.log(error.message, " i am error")
+    // console.log(error.message, " i am error")
     setAlertMessage(error.message)
 }
     }
 
      async function handleLogin(){
   const {data,error}  =await login(email,password);
-  console.log(data,error)
+//   console.log(data,error)
   if(error && error.message){
 
       setAlertMessage(error.message)
@@ -54,7 +54,7 @@ if(error && error.message){
 
   if(!error){
 
-    console.log(data.user.email)
+    // console.log(data.user.email)
     setAlertMessage("Hii  "+ data.user.email +"  now are you being redirected to our dashboard page ")
     setTimeout(()=>{
         router.push("/")

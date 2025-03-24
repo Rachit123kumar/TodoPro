@@ -19,7 +19,7 @@ useEffect(()=>{
   async function fetchDocsData(){
 
     const res=await getDocs(id)
-    console.log(res)
+    // console.log(res)
     setData(res)
 
   }

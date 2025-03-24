@@ -22,7 +22,7 @@ export default function AccountMenu({title="",user}) {
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
-  console.log(user,"user", title,"title")
+  // console.log(user,"user", title,"title")
 
 const queryClient= useQueryClient()
 
