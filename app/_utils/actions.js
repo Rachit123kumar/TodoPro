@@ -322,7 +322,7 @@ export async function getMessages(userId,friendId){
 
   export async function signOut() {
     const { error } = await supabase.auth.signOut()
-    if(!error){
-      throw new Error("Error while sign out")
+    if(error){
+     toast("Error while signOut")
     }
   }

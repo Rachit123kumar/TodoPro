@@ -22,12 +22,15 @@ export default function AccountMenu({title="",user}) {
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
+
+  const [buttonClicked,setButtonClicked]=React.useState(false)
   // console.log(user,"user", title,"title")
 
 const queryClient= useQueryClient()
 
   async function handleLogout(){
     await signOut()
+
     queryClient.invalidateQueries({
       queryKey:["userInfo"]
     })
@@ -43,7 +46,7 @@ const queryClient= useQueryClient()
       <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
         {/* <Typography sx={{ minWidth: 100 }}>Contact</Typography>
         <Typography sx={{ minWidth: 100 }}>Profile</Typography> */}
-        {user ?<Tooltip title="Account settings">
+        {user && !buttonClicked ?<Tooltip title="Account settings">
           <IconButton
             onClick={handleClick}
             size="small"

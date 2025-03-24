@@ -113,7 +113,7 @@ try{
 
     
 
-{
+{ data &&
   myDocs.length >0 &&
   myDocs.map((el,i)=>{
     return <div key={i} onClick={()=>router.push(`/docs/edit/${el.id}`)} className="rounded cursor-pointer relative h-[200px] w-[200px]  bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500">
